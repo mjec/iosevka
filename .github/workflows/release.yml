@@ -12,6 +12,10 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
+    - name: Install ttfautohint
+      run: |
+        sudo apt-get update
+        sudo apt-get install ttfautohint
     - name: Checkout Iosevka
       uses: actions/checkout@v3
       with:
