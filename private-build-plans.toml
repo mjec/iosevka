@@ -1,0 +1,29 @@
+[buildPlans.iosevka-custom]
+family = "Iosevka Custom"
+spacing = "term"
+serifs = "sans"
+no-cv-ss = false
+export-glyph-names = true
+
+[buildPlans.iosevka-custom.variants.design]
+capital-j = "serifed-both-sides"
+capital-q = "crossing-curly-tailed"
+b = "toothless-rounded-serifless"
+e = "flat-crossbar"
+i = "tailed"
+j = "serifless"
+l = "tailed"
+q = "tailed-serifless"
+u = "toothless-rounded-serifless"
+z = "straight-serifless"
+lower-mu = "tailed-motion-serifed"
+one = "base"
+three = "flat-top"
+seven = "bend-serifless"
+nine = "open-contour"
+asterisk = "penta-low"
+brace = "curly"
+at = "fourfold"
+bar = "natural-slope"
+question = "smooth"
+micro-sign = "tailed-motion-serifed"
