@@ -1,0 +1,55 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: private-build-plans.toml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    - name: Checkout Iosevka
+      uses: actions/checkout@v3
+      with:
+        repository: be5invis/Iosevka
+        ref: v26.2.2
+        fetch-depth: 1
+        fetch-tags: false
+    - name: Checkout configuration
+      uses: actions/checkout@v3
+      with:
+        path: iosevka-mjec-config
+    - name: Place config in correct location
+      run: ln -s iosevka-mjec-config/private-build-plans.toml private-build-plans.toml
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Install dependencies
+      run: npm ci
+    - name: Restore build cache
+      uses: actions/cache/restore@v3
+      id: cache-build-restore
+      with:
+        path: .build
+        key: ${{ runner.os }}-build
+    - name: Build the font
+      run: npm run build -- ttf::iosevka-mjec --jCmd=4
+    - name: Compress the release
+      run: zip -j -q release.zip dist/iosevka-mjec/ttf/* 
+    - name: Save build cache
+      uses: actions/cache/save@v3
+      id: cache-build-save
+      with:
+        path: .build
+        key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
+    - name: Create release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          release.zip
